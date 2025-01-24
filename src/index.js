@@ -1,7 +1,7 @@
 const path = require('path');
 const express = require('express');
 const app = express();
-const http = require('http').Server(app);
+const http = require('http').createServer(app);
 const io = require('socket.io')(http);
 app.use(express.json());
 
@@ -106,14 +106,14 @@ io.on('connection', function(socket) {
     };
     io.to(`tutor-${roomCode}`).emit('refresh-tutor', data);
     if (data.beep) {
-      console.log(`beep: ${roomCode}`);
+      console.log(`[${new Date().toISOString()}] beep: ${roomCode}`);
     }
   }
   
   function refreshLearner(roomCode, client) {
     const room = getRoom(roomCode);
     const learner = room.learners[client] || {};
-    data = {
+    const data = {
       room: room.code,
       client: client,
       name: learner.name || "",
@@ -123,26 +123,26 @@ io.on('connection', function(socket) {
   }
 
   socket.on('join-as-learner', (roomCode, client) => {
-    console.log(`join-as-learner: ${roomCode} - ${client}`);
+    console.log(`[${new Date().toISOString()}] join-as-learner: ${roomCode} - ${client}`);
     associateSocketWithLearnerRoom(roomCode);
     refreshLearner(roomCode, client);
     refreshTutor(roomCode);
   });
 
   socket.on('join-as-tutor', (roomCode) => {
-    console.log(`join-as-tutor: ${roomCode}`);
+    console.log(`[${new Date().toISOString()}] join-as-tutor: ${roomCode}`);
     associateSocketWithTutorRoom(roomCode);
     refreshTutor(roomCode);
   });
 
   socket.on('ping-from-tutor', (roomCode) => {
-    console.log(`ping-from-tutor: ${roomCode}`);
+    console.log(`[${new Date().toISOString()}] ping-from-tutor: ${roomCode}`);
     associateSocketWithTutorRoom(roomCode);
     refreshTutor(roomCode);
   });
 
   socket.on('clear', (roomCode) => {
-    console.log(`clear: ${roomCode}`);
+    console.log(`[${new Date().toISOString()}] clear: ${roomCode}`);
     associateSocketWithTutorRoom(roomCode);
     const room = getRoom(roomCode);
     for (const client in room.learners) {
@@ -156,7 +156,7 @@ io.on('connection', function(socket) {
   });
 
   socket.on('kick-learner', (roomCode, client) => {
-    console.log(`kick-learner: ${roomCode} ${client}`);
+    console.log(`[${new Date().toISOString()}] kick-learner: ${roomCode} ${client}`);
     associateSocketWithTutorRoom(roomCode);
     const room = getRoom(roomCode);
     delete room.learners[client];
@@ -165,7 +165,7 @@ io.on('connection', function(socket) {
   });
 
   socket.on('kick-all-learners', (roomCode) => {
-    console.log(`kick-all-learners: ${roomCode}`);
+    console.log(`[${new Date().toISOString()}] kick-all-learners: ${roomCode}`);
     associateSocketWithTutorRoom(roomCode);
     const room = getRoom(roomCode);
     room.learners = { };
@@ -175,7 +175,7 @@ io.on('connection', function(socket) {
 
   socket.on('status', (data) => {
     try {
-      console.log(`status: ${JSON.stringify(data)}`);
+      console.log(`[${new Date().toISOString()}] status: ${data.room} - ${data.name} ~ ${data.status}`);
       const { client, name, status } = data;
       const roomCode = data.room;
       associateSocketWithLearnerRoom(roomCode);
@@ -209,13 +209,14 @@ io.on('connection', function(socket) {
       saveRoom(room);
       refreshTutor(roomCode);
     } catch (error) {
-      console.log(error);
+      console.log(`${new Date().toISOString()} - ${error}`);
     }
   });
 
   socket.on('ping-from-learner', (data) => {
     try {
-      console.log(`ping-from-learner: ${JSON.stringify(data)}`);
+
+      console.log(`[${new Date().toISOString()}] ping-from-learner: ${data.room} - ${data.name}`);
       const { client, name, status } = data;
       const roomCode = data.room;
       associateSocketWithLearnerRoom(roomCode);
@@ -230,12 +231,13 @@ io.on('connection', function(socket) {
       refreshTutor(roomCode);
       refreshLearner(roomCode, client);
     } catch (error) {
-      console.log(error);
+      console.log(`${new Date().toISOString()} - ${error}`);
     }
   });
 });
 
 const port = process.env.PORT || 8000;
 http.listen(port, () => {
-  console.log(`Listening on port ${port}`);
+  console.log(`[${new Date().toISOString()}] Server started on port ${port}`);
+
 });

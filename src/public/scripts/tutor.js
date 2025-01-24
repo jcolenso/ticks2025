@@ -21,7 +21,7 @@ const tutorController = function($scope, $http, $routeParams, $interval, $locati
 
   $scope.selectLearner = function(learner) {
     if (!$scope.selectedClients.includes(learner.client)) {
-      // Not currently selected, so add learner to liust of selected ones
+      // Not currently selected, so add learner to list of selected ones
       $scope.selectedClients.push(learner.client);
     } else {
       // Selected, so remove from the list
@@ -29,17 +29,11 @@ const tutorController = function($scope, $http, $routeParams, $interval, $locati
         return client != learner.client;
       });
     }
-  }
+  };
 
   $scope.copyUrl = function () {
-    const tempInput = document.createElement("input");
-    tempInput.style = "position: absolute; left: -1000px; top: -1000px";
-    tempInput.value = $scope.url;
-    document.body.appendChild(tempInput);
-    tempInput.select();
-    document.execCommand("copy");
-    document.body.removeChild(tempInput);
-  }
+    navigator.clipboard.writeText($scope.url).catch(() => {});
+  };
 
   $scope.clearStatus = function () {
     // Clear status in browser first
@@ -54,19 +48,19 @@ const tutorController = function($scope, $http, $routeParams, $interval, $locati
     // Then do it in the server too
     const roomCode = $routeParams.room;
     socket.emit('clear', roomCode);
-  }
+  };
 
   $scope.kickSelectedLearners = function() {
     for (i = 0; i < $scope.selectedClients.length; i++) {
       socket.emit('kick-learner', $routeParams.room, $scope.selectedClients[i]);
     }
     $scope.selectedClients = [];
-  }
+  };
 
   $scope.kickAllLearners = function() {
     socket.emit('kick-all-learners', $routeParams.room);
     $scope.selectedClients = [];
-  }
+  };
 
   $window.document.title = "Tutor - " + $scope.room.room;
 
@@ -85,7 +79,7 @@ const tutorController = function($scope, $http, $routeParams, $interval, $locati
 
   function sendPing() {
     socket.emit("ping-from-tutor", $routeParams.room)
-  }
+  };
 
   let pingTimer = $interval(sendPing, pingIntervalInMilliseconds);
 
@@ -93,7 +87,7 @@ const tutorController = function($scope, $http, $routeParams, $interval, $locati
     if (!$document[0].hidden) {
       sendPing();
     }
-  }
+  };
 
   // When user comes back to this page in browser, send in case connection lost in meantime
   $document[0].addEventListener('visibilitychange', onVisibilityChange);
