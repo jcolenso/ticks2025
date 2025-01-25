@@ -24,7 +24,7 @@ const learnerController = function($scope, $http, $routeParams, $localStorage, $
   function submitStatus() {
     const data = {
       client: getClient(),
-      room: $routeParams.room,
+      room: $routeParams.room.toUpperCase(),  // ADDDED
       status: $scope.learner.status,
       name: $scope.learner.name
     };
@@ -34,7 +34,7 @@ const learnerController = function($scope, $http, $routeParams, $localStorage, $
   function submitName() {
     const data = {
       client: getClient(),
-      room: $routeParams.room,
+      room: $routeParams.room.toUpperCase(),  // ADDED
       name: $scope.learner.name
     };
     socket.emit('status', data);
@@ -88,7 +88,7 @@ const learnerController = function($scope, $http, $routeParams, $localStorage, $
   function sendPing() {
     const data = {
       client: getClient(),
-      room: $routeParams.room,
+      room: $routeParams.room.toUpperCase(),  // ADDED
       name: $scope.learner.name
     };
     socket.emit('ping-from-learner', data);
