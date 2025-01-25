@@ -57,7 +57,6 @@ app.get('*', function (req, res) {
 });
 
 function getRoom(code) {
-  //console.log(`DEBUG1: ${JSON.stringify(db)}`);
   return db[code] || {
     code: code,
     learners: {}
@@ -65,7 +64,6 @@ function getRoom(code) {
 }
 
 function saveRoom(room) {
-  //console.log(`DEBUG2: ${JSON.stringify(db)}`);
   db[room.code] = room;
 }
 
@@ -199,15 +197,12 @@ io.on('connection', function(socket) {
   });
 
   socket.on('status', (data) => {
-    console.log(`DEBUG5: ${JSON.stringify(data)}`);
     try {
       console.log(`[${new Date().toISOString()}] status: ${data.room} - ${data.name} ~ ${data.status}`);
       const { client, name, status } = data;
       const roomCode = data.room.toUpperCase(); // ADDED
-      console.log(`DEBUG6: ${roomCode}`);
       associateSocketWithLearnerRoom(roomCode);
       const room = getRoom(roomCode);
-      console.log(`DEBUG7: ${JSON.stringify(room)}`);
       const learner = room.learners[client] || {};
       if (name != undefined) {
         learner.name = name;
@@ -237,7 +232,10 @@ io.on('connection', function(socket) {
       saveRoom(room);
       refreshTutor(roomCode);
     } catch (error) {
-      console.log(`${new Date().toISOString()} - ${error}`);
+      const logMessage = `ERROR: socket.on(status - ${error}\n`;
+      console.log(logMessage); // Log to console
+      fs.appendFileSync(logFile, logMessage); // Log to console.log
+      fs.appendFileSync(logFile, `${JSON.stringify(data, null, 2)}\n`);
     }
   });
 
@@ -258,7 +256,10 @@ io.on('connection', function(socket) {
       refreshTutor(roomCode);
       refreshLearner(roomCode, client);
     } catch (error) {
-      console.log(`${new Date().toISOString()} - ${error}`);
+      const logMessage = `ERROR: socket.on('ping-from-learner - ${error}\n`;
+      console.log(logMessage); // Log to console
+      fs.appendFileSync(logFile, logMessage); // Log to console.log
+      fs.appendFileSync(logFile, `${JSON.stringify(data, null, 2)}\n`);
     }
   });
 });
@@ -266,5 +267,4 @@ io.on('connection', function(socket) {
 const port = process.env.PORT || 8000;
 http.listen(port, () => {
   console.log(`[${new Date().toISOString()}] Server started on port ${port}`);
-
 });
