@@ -5,12 +5,19 @@ const http = require('http').createServer(app);
 const io = require('socket.io')(http);
 app.use(express.json());
 
+// Setup debug
+const debug = require('debug')('ticks');
+debug('DEBUG=ticks is set');
+
+// Write to a file that can be read from the browser
 const fs = require('fs');
 const logFile = path.join(__dirname, 'server.log'); // Log file in the root directory
 
+// Set timeout values in minutes
 const activeTimeoutInMinutes = 3;  // If no comms from learner for this long, grey them out
 const removalTimeoutInMinutes = 5; // If no comms from learner for this long, delete them
 
+// Initialise the database
 const db = {};
 
 // Special case: if ask for index.html, redirect to / (else looks like trying to join the room 'index.html'!)
@@ -72,6 +79,7 @@ function tidyRoom(room) {
     const learner = room.learners[client];
     const minutesSinceLastCommunication = Math.trunc((new Date() - learner.lastCommunication) / 1000 / 60);
     if (minutesSinceLastCommunication >= removalTimeoutInMinutes) {
+      debug(`tidy room: delete - ${learner.name}`);
       delete room.learners[client];
     } else {
       learner.isActive = (minutesSinceLastCommunication < activeTimeoutInMinutes);
@@ -120,7 +128,7 @@ io.on('connection', function(socket) {
     };
     io.to(`tutor-${roomCode}`).emit('refresh-tutor', data);
     if (data.beep) {
-      console.log(`[${new Date().toISOString()}] beep: ${roomCode}`);
+      debug(`beep: ${roomCode}`);
     }
   }
   
@@ -156,14 +164,17 @@ io.on('connection', function(socket) {
 
   socket.on('ping-from-tutor', (roomCode) => {
     roomCode = roomCode.toUpperCase(); // ADDED
-    console.log(`[${new Date().toISOString()}] ping-from-tutor: ${roomCode}`);
+    debug(`ping-from-tutor: ${roomCode}`);
+
+    debug(`Current DB State: ${JSON.stringify(db, null, 2)}`);    
+
     associateSocketWithTutorRoom(roomCode);
     refreshTutor(roomCode);
   });
 
   socket.on('clear', (roomCode) => {
     roomCode = roomCode.toUpperCase(); // ADDED
-    console.log(`[${new Date().toISOString()}] clear: ${roomCode}`);
+    debug(`clear: ${roomCode}`);
     associateSocketWithTutorRoom(roomCode);
     const room = getRoom(roomCode);
     for (const client in room.learners) {
@@ -178,7 +189,7 @@ io.on('connection', function(socket) {
 
   socket.on('kick-learner', (roomCode, client) => {
     roomCode = roomCode.toUpperCase(); // ADDED
-    console.log(`[${new Date().toISOString()}] kick-learner: ${roomCode} ${client}`);
+    debug(`kick-learner: ${roomCode} - ${client}`);
     associateSocketWithTutorRoom(roomCode);
     const room = getRoom(roomCode);
     delete room.learners[client];
@@ -188,6 +199,7 @@ io.on('connection', function(socket) {
 
   socket.on('kick-all-learners', (roomCode) => {
     roomCode = roomCode.toUpperCase(); // ADDED
+    debug(`kick-all-learners: ${roomCode}`);
     console.log(`[${new Date().toISOString()}] kick-all-learners: ${roomCode}`);
     associateSocketWithTutorRoom(roomCode);
     const room = getRoom(roomCode);
@@ -198,7 +210,7 @@ io.on('connection', function(socket) {
 
   socket.on('status', (data) => {
     try {
-      console.log(`[${new Date().toISOString()}] status: ${data.room} - ${data.name} ~ ${data.status}`);
+      debug(`status: ${data.room} - ${data.name} ~ ${data.status}`);
       const { client, name, status } = data;
       const roomCode = data.room.toUpperCase(); // ADDED
       associateSocketWithLearnerRoom(roomCode);
@@ -241,7 +253,7 @@ io.on('connection', function(socket) {
 
   socket.on('ping-from-learner', (data) => {
     try {
-      console.log(`[${new Date().toISOString()}] ping-from-learner: ${data.room} - ${data.name}`);
+      debug(`ping-from-learner: ${data.room} - ${data.name}`);
       const { client, name, status } = data;
       const roomCode = data.room.toUpperCase(); // ADDED
       associateSocketWithLearnerRoom(roomCode);
