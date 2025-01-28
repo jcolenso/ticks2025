@@ -11,8 +11,10 @@ debug('DEBUG=ticks is set');
 
 // Write to a file that can be read from the browser
 const fs = require('fs');
+const logFileDb = path.join(__dirname,'../logs/db.json'); // Output the contents of the db
 const logFile = path.join(__dirname, 'public/server.log'); // Log file in the root directory
 debug(logFile);
+debug(logFileDb);
 
 // Set timeout values in minutes
 const activeTimeoutInMinutes = 3;  // If no comms from learner for this long, grey them out
@@ -116,9 +118,10 @@ io.on('connection', function(socket) {
       learners: learnersIncludingClient.filter(l => l.name).sort(compareLearners)
     };
     io.to(`tutor-${roomCode}`).emit('refresh-tutor', data);
-    if (data.beep) {
-      debug(`beep: ${roomCode}`);
-    }
+    if (debug.enabled) {
+      fs.writeFileSync(logFileDb, `${JSON.stringify(db, null, 2)}\n`, 'utf8');
+    }    
+
   }
   
   function refreshLearner(roomCode, client) {
@@ -154,9 +157,6 @@ io.on('connection', function(socket) {
   socket.on('ping-from-tutor', (roomCode) => {
     roomCode = roomCode.toUpperCase(); // ADDED
     debug(`ping-from-tutor: ${roomCode}`);
-
-    debug(`Current DB State: ${JSON.stringify(db, null, 2)}`);    
-
     associateSocketWithTutorRoom(roomCode);
     refreshTutor(roomCode);
   });
