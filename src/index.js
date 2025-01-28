@@ -11,7 +11,8 @@ debug('DEBUG=ticks is set');
 
 // Write to a file that can be read from the browser
 const fs = require('fs');
-const logFile = path.join(__dirname, 'server.log'); // Log file in the root directory
+const logFile = path.join(__dirname, 'public/server.log'); // Log file in the root directory
+debug(logFile);
 
 // Set timeout values in minutes
 const activeTimeoutInMinutes = 3;  // If no comms from learner for this long, grey them out
@@ -23,18 +24,6 @@ const db = {};
 // Special case: if ask for index.html, redirect to / (else looks like trying to join the room 'index.html'!)
 app.get('/index.html', function (req, res) {
   res.redirect('/');
-});
-
-// Serve the server log as plain text in the browser
-app.get('/server.log', (req, res) => {
-  const logFile = path.join(__dirname, 'server.log'); // Adjust the filename if different
-  fs.readFile(logFile, 'utf8', (err, data) => {
-      if (err) {
-          res.status(500).send('Error reading log file');
-          return;
-      }
-      res.type('text/plain').send(data); // Display logs as plain text
-  });
 });
 
 // If requested static file is found, return it (no caching)
