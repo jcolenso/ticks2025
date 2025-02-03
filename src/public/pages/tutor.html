@@ -4,7 +4,7 @@
       <div class="row">
         <h1>Room {{room.room}}</h1>
       </div>
-      <div class="row2 url">
+      <div class="row2 url" ng-if="room.room.length > 1">
         <span class="url">{{url}}</span>
         <span class="col-gap"></span>
         <button ng-click="copyUrl()" title="Copy to clipboard" class="clipboard">
@@ -41,6 +41,10 @@
           </tfoot>
         </table>
       </div>
+    </div>
+    <div class="section" ng-if="room.room.length < 2">
+      <div class="section-gap"></div>
+      <div class="row">Invalid room length.</div>
     </div>
     <div class="section" ng-if="room.learners.length == 0">
       <div class="section-gap"></div>
