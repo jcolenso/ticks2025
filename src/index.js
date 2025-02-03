@@ -41,17 +41,37 @@ app.use('/', express.static(path.join(__dirname, 'public'), {
 
 // If request looks like an unfound file, i.e. contains a dot, then return 404 page not found
 app.get('*.*', function (req, res) {
-  res.sendStatus(404).end();
+  debug(`Page not found: ${req.path}`);
+  res.sendStatus(404);
 });
 
-// For every other request, need to return index.html (no caching)
-app.get('*', function (req, res) {
+// Cannot be a single character
+app.get(/^\/.$/, function (req, res) {
+  debug(`Forbidden [.]: ${req.path}`);
+  res.sendStatus(403); // Block paths that are exactly 1 character long
+});
+
+// For pages with letters and/or numbers return index.html
+app.get(/^\/([A-Za-z0-9]+(\/[A-Za-z0-9]+)*)?$/, function (req, res) {
+  // Check if there are any query parameters
+  if (Object.keys(req.query).length > 0) {
+    debug(`Forbidden [?]: ${req.path} ~ ${JSON.stringify(req.query)}`); 
+    return res.sendStatus(403);
+  }
+  // Send the index.html file (or other file) from the public folder
+  debug(`URL: ${req.path}`);
   res.sendFile(path.join(__dirname, 'public/index.html'), {
     cacheControl: true,
     maxAge: 0,
     etag: false,
     lastModified: false
    });
+});
+
+// Block anything else (including special characters)
+app.get('*', function (req, res) {
+  debug(`Forbidden [*]: ${req.path}`);
+  res.sendStatus(403); // Page Forbidden if it gets this far
 });
 
 function getRoom(code) {
