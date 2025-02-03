@@ -198,7 +198,7 @@ io.on('connection', function(socket) {
 
   socket.on('kick-learner', (roomCode, client) => {
     roomCode = roomCode.toUpperCase(); // ADDED
-    debug(`kick-learner: ${roomCode} - ${client}`);
+    debug(`reset-learner: ${roomCode} - ${client}`);
     associateSocketWithTutorRoom(roomCode);
     const room = getRoom(roomCode);
     delete room.learners[client];
@@ -208,8 +208,8 @@ io.on('connection', function(socket) {
 
   socket.on('kick-all-learners', (roomCode) => {
     roomCode = roomCode.toUpperCase(); // ADDED
-    debug(`kick-all-learners: ${roomCode}`);
-    console.log(`[${new Date().toISOString()}] kick-all-learners: ${roomCode}`);
+    debug(`reset-all-learners: ${roomCode}`);
+    console.log(`[${new Date().toISOString()}] reset-all-learners: ${roomCode}`);
     associateSocketWithTutorRoom(roomCode);
     const room = getRoom(roomCode);
     room.learners = { };
