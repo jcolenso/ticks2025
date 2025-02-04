@@ -29,8 +29,21 @@ const pollController = function($scope, $http, $routeParams, $window) {
       }
     });
 
+    // Find the highest count inside the function
+    let highestCount = 0;
+
+    for (const status in counts) {
+      if (counts[status] > highestCount) {
+        highestCount = counts[status];
+      }
+    }
+
+    // Store the results
     $scope.statusCounts = counts;
+    $scope.highestCount = highestCount; // Save the highest count
+
   };
+
 
 };
 

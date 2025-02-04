@@ -136,7 +136,7 @@ td.status {
   flex: 1 1 0%;
 }
 
-input[type=text], input[type="password"] {
+input[type=text] {
   width: 100%;
   padding: 5px;
   font-size: large;
@@ -209,13 +209,18 @@ td {
   opacity: 50%;
 }
 
-/* for bar in poll */
+/* draw bars in poll */
+/* Base class for blocks */
 .block {
   display: inline-block;
   width: 15px;
   height: 15px;
-  background-color: blue;
   margin-right: 5px;
+  background-color: blue;
+}
+/* green block */
+.green-block {
+  background-color: green;
 }
 
 /* Mobile devices */

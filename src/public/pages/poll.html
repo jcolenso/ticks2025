@@ -20,9 +20,9 @@
             </tr>
           </thead>
           <tbody>
-            <tr class="learner" ng-repeat="(status, count) in statusCounts">
+            <tr ng-repeat="(status, count) in statusCounts">
               <td style="text-align: left;">
-                <div ng-repeat="n in [].constructor(count) track by $index" class="block"></div>
+                <div ng-repeat="n in [].constructor(count) track by $index" class="block" ng-class="{'green-block': count === highestCount}"></div>
               </td>
               <td class="status" style="text-align: left;">
                 <status-symbol status="status" />
