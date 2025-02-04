@@ -209,6 +209,15 @@ td {
   opacity: 50%;
 }
 
+/* for bar in poll */
+.block {
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  background-color: blue;
+  margin-right: 5px;
+}
+
 /* Mobile devices */
 @media only screen and (max-width: 420px) {
   .main {

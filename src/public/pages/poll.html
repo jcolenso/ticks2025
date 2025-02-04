@@ -1,0 +1,45 @@
+<div class="main tutor">
+  <div class="panel">
+    <div class="section">
+      <div class="row">
+        <h1>Room {{room.room}}</h1>
+      </div>
+    </div>
+    <div class="section" ng-if="room.learners.length > 0">
+      <div class="section-gap"></div>
+      <div class="row2">
+        <table>
+          <thead>
+            <tr>
+              <td colspan="2">
+                Total learners
+              </td>
+              <td style="text-align: right;">
+                {{ room.learners.length }}
+              </td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="learner" ng-repeat="(status, count) in statusCounts">
+              <td style="text-align: left;">
+                <div ng-repeat="n in [].constructor(count) track by $index" class="block"></div>
+              </td>
+              <td class="status" style="text-align: left;">
+                <status-symbol status="status" />
+              </td>
+              <td style="text-align: right;">
+                <span>{{ count }}</span>
+              </td>
+             </tr>  
+          </tbody>
+          <tfoot>            
+          </tfoot>
+        </table>
+      </div>
+    </div>
+    <div class="section" ng-if="room.learners.length == 0 && room.room.length > 1">
+      <div class="section-gap"></div>
+      <div class="row">No learners have joined the room yet.</div>
+    </div>
+  </div>
+</div>

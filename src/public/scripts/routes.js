@@ -19,6 +19,11 @@ app.config(function($routeProvider) {
     controller: "tutor-controller",
     caseInsensitiveMatch: true
   })
+  .when("/:room/poll", {
+    templateUrl : "pages/poll.html",
+    controller: "poll-controller",
+    caseInsensitiveMatch: true
+  })
   .when("/:room", {
     templateUrl : "pages/learner.html",
     controller: "learner-controller",
