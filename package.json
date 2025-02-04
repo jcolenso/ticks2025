@@ -11,7 +11,7 @@
     "start": "node src/index.js",
     "dev": "nodemon src/index.js"
   },
-  "author": "Andrew Burgess, QA Apprenticeships",
+  "author": "John Colenso",
   "license": "ISC",
   "dependencies": {
     "express": "^4.21.2",
