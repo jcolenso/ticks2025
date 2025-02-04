@@ -46,7 +46,7 @@
       <div class="section-gap"></div>
       <div class="row">Invalid room length.</div>
     </div>
-    <div class="section" ng-if="room.learners.length == 0">
+    <div class="section" ng-if="room.learners.length == 0 && room.room.length > 1">
       <div class="section-gap"></div>
       <div class="row">No learners have joined the room yet.</div>
       <div class="row-gap"></div>
