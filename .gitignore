@@ -1,7 +1,7 @@
 server.log
 db.json
 logs/*
-r
+bin/*
 
 .vscode/
 node_modules/
