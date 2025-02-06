@@ -2,6 +2,8 @@ const learnerController = function($scope, $http, $routeParams, $localStorage, $
 
   const pingIntervalInMilliseconds = 1 * 60 * 1000; // 1 minute
 
+  $scope.timeMessage = "";
+
   function uuidv4() {
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
       var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
@@ -24,17 +26,18 @@ const learnerController = function($scope, $http, $routeParams, $localStorage, $
   function submitStatus() {
     const data = {
       client: getClient(),
-      room: $routeParams.room.toUpperCase(),  // ADDDED
+      room: $routeParams.room.toUpperCase(),
       status: $scope.learner.status,
       name: $scope.learner.name
     };
+    // $scope.timeMessage = $scope.learner.status; // Show status name
     socket.emit('status', data);
   }
 
   function submitName() {
     const data = {
       client: getClient(),
-      room: $routeParams.room.toUpperCase(),  // ADDED
+      room: $routeParams.room.toUpperCase(),
       name: $scope.learner.name
     };
     socket.emit('status', data);
@@ -88,7 +91,7 @@ const learnerController = function($scope, $http, $routeParams, $localStorage, $
   function sendPing() {
     const data = {
       client: getClient(),
-      room: $routeParams.room.toUpperCase(),  // ADDED
+      room: $routeParams.room.toUpperCase(),
       name: $scope.learner.name
     };
     socket.emit('ping-from-learner', data);
