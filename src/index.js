@@ -170,8 +170,8 @@ io.on('connection', function(socket) {
 
   socket.on('join-as-tutor', (roomCode) => {
     roomCode = roomCode.toLowerCase();
-    const logMessage = `join-as-tutor: ${roomCode}\n`;
-    console.log(`[${new Date().toISOString()}] ${logMessage}`); // Log to console
+    const logMessage = `[${new Date().toISOString()}] join-as-tutor: ${roomCode}\n`;
+    console.log(`${logMessage}`);           // Log to console
     fs.appendFileSync(logFile, logMessage); // Log to file
     associateSocketWithTutorRoom(roomCode);
     refreshTutor(roomCode);
