@@ -14,6 +14,11 @@ app.config(function($routeProvider) {
     controller: "browser-check",
     caseInsensitiveMatch: true
   })
+  .when("/intro", {
+    templateUrl : "pages/intro.html",
+    controller: 'intro-controller',
+    caseInsensitiveMatch: true
+  })
   .when("/:room/tutor", {
     templateUrl : "pages/tutor.html",
     controller: "tutor-controller",
@@ -30,7 +35,7 @@ app.config(function($routeProvider) {
     caseInsensitiveMatch: true
   })
   .otherwise({
-    templateUrl : "pages/intro.html",
-    controller: 'intro-controller'
+    templateUrl : "pages/new-room.html",
+    controller: 'newroom-controller'
   })
 });
