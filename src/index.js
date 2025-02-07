@@ -77,6 +77,7 @@ app.get('*', function (req, res) {
 function getRoom(code) {
   return db[code] || {
     code: code,
+    description: "Room " + code.toUpperCase(),  // Default room description
     learners: {}
   };
 }
@@ -115,18 +116,18 @@ io.on('connection', function(socket) {
     socket.rooms.forEach(r => {
       socket.leave(r);
     });
-    socket.join(`tutor-${roomCode.toUpperCase()}`);
+    socket.join(`tutor-${roomCode.toLowerCase()}`);
   }
 
   function associateSocketWithLearnerRoom(roomCode) {
     socket.rooms.forEach(r => {
       socket.leave(r);
     });
-    socket.join(roomCode.toUpperCase());    
+    socket.join(roomCode.toLowerCase());    
   }
 
   function refreshTutor(roomCode) {
-    roomCode = roomCode.toUpperCase();
+    roomCode = roomCode.toLowerCase();
     const room = getRoom(roomCode);
     const beep = room.beep;
     delete room.beep;
@@ -134,6 +135,7 @@ io.on('connection', function(socket) {
     const learnersIncludingClient = Object.entries(room.learners).map(e => ({client: e[0], ...e[1]}));
     const data = {
       room: room.code,
+      description: room.description,
       beep: beep,
       learners: learnersIncludingClient.filter(l => l.name).sort(compareLearners)
     };
@@ -145,11 +147,12 @@ io.on('connection', function(socket) {
   }
   
   function refreshLearner(roomCode, client) {
-    roomCode = roomCode.toUpperCase(); // ADDED
+    roomCode = roomCode.toLowerCase();
     const room = getRoom(roomCode);
     const learner = room.learners[client] || {};
     const data = {
       room: room.code,
+      description: room.description,
       client: client,
       name: learner.name || "",
       status: learner.status || ""
@@ -158,7 +161,7 @@ io.on('connection', function(socket) {
   }
 
   socket.on('join-as-learner', (roomCode, client) => {
-    roomCode = roomCode.toUpperCase();
+    roomCode = roomCode.toLowerCase();
     console.log(`[${new Date().toISOString()}] join-as-learner: ${roomCode} - ${client}`);
     associateSocketWithLearnerRoom(roomCode);
     refreshLearner(roomCode, client);
@@ -166,23 +169,23 @@ io.on('connection', function(socket) {
   });
 
   socket.on('join-as-tutor', (roomCode) => {
-    roomCode = roomCode.toUpperCase();
-    const logMessage = `[${new Date().toISOString()}] join-as-tutor: ${roomCode}\n`;
-    console.log(logMessage); // Log to console
+    roomCode = roomCode.toLowerCase();
+    const logMessage = `join-as-tutor: ${roomCode}\n`;
+    console.log(`[${new Date().toISOString()}] ${logMessage}`); // Log to console
     fs.appendFileSync(logFile, logMessage); // Log to file
     associateSocketWithTutorRoom(roomCode);
     refreshTutor(roomCode);
   });
 
   socket.on('ping-from-tutor', (roomCode) => {
-    roomCode = roomCode.toUpperCase(); // ADDED
+    roomCode = roomCode.toLowerCase();
     debug(`ping-from-tutor: ${roomCode}`);
     associateSocketWithTutorRoom(roomCode);
     refreshTutor(roomCode);
   });
 
   socket.on('clear', (roomCode) => {
-    roomCode = roomCode.toUpperCase(); // ADDED
+    roomCode = roomCode.toLowerCase();
     debug(`clear: ${roomCode}`);
     associateSocketWithTutorRoom(roomCode);
     const room = getRoom(roomCode);
@@ -197,7 +200,7 @@ io.on('connection', function(socket) {
   });
 
   socket.on('kick-learner', (roomCode, client) => {
-    roomCode = roomCode.toUpperCase(); // ADDED
+    roomCode = roomCode.toLowerCase();
     debug(`reset-learner: ${roomCode} - ${client}`);
     associateSocketWithTutorRoom(roomCode);
     const room = getRoom(roomCode);
@@ -207,9 +210,8 @@ io.on('connection', function(socket) {
   });
 
   socket.on('kick-all-learners', (roomCode) => {
-    roomCode = roomCode.toUpperCase(); // ADDED
+    roomCode = roomCode.toLowerCase();
     debug(`reset-all-learners: ${roomCode}`);
-    console.log(`[${new Date().toISOString()}] reset-all-learners: ${roomCode}`);
     associateSocketWithTutorRoom(roomCode);
     const room = getRoom(roomCode);
     room.learners = { };
@@ -221,7 +223,7 @@ io.on('connection', function(socket) {
     try {
       debug(`status: ${data.room} - ${data.name} ~ ${data.status}`);
       const { client, name, status } = data;
-      const roomCode = data.room.toUpperCase(); // ADDED
+      const roomCode = data.room.toLowerCase();
       associateSocketWithLearnerRoom(roomCode);
       const room = getRoom(roomCode);
       const learner = room.learners[client] || {};
@@ -254,7 +256,7 @@ io.on('connection', function(socket) {
       refreshTutor(roomCode);
     } catch (error) {
       const logMessage = `ERROR: socket.on(status - ${error}\n`;
-      console.log(logMessage); // Log to console
+      console.log(`[${new Date().toISOString()}] ${logMessage}`); // Log to console
       fs.appendFileSync(logFile, logMessage); // Log to console.log
       fs.appendFileSync(logFile, `${JSON.stringify(data, null, 2)}\n`);
     }
@@ -264,7 +266,7 @@ io.on('connection', function(socket) {
     try {
       debug(`ping-from-learner: ${data.room} - ${data.name}`);
       const { client, name, status } = data;
-      const roomCode = data.room.toUpperCase(); // ADDED
+      const roomCode = data.room.toLowerCase();
       associateSocketWithLearnerRoom(roomCode);
       const room = getRoom(roomCode);
       const learner = room.learners[client] || {};
@@ -278,7 +280,7 @@ io.on('connection', function(socket) {
       refreshLearner(roomCode, client);
     } catch (error) {
       const logMessage = `ERROR: socket.on('ping-from-learner - ${error}\n`;
-      console.log(logMessage); // Log to console
+      console.log(`[${new Date().toISOString()}] ${logMessage}`); // Log to console
       fs.appendFileSync(logFile, logMessage); // Log to console.log
       fs.appendFileSync(logFile, `${JSON.stringify(data, null, 2)}\n`);
     }

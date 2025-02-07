@@ -1,13 +1,13 @@
 const pollController = function($scope, $http, $routeParams, $window) {
-  
+
   $scope.room = {
-    room: $routeParams.room.toUpperCase(),
+    code: $routeParams.room.toLowerCase(),
     learners: [],
   };
 
   $scope.statusCounts = {}; // Stores count of learners per status
 
-  $window.document.title = "Poll - " + $scope.room.room;
+  $window.document.title = "Poll - " + $scope.room.code.toUpperCase();
 
   // Register as a tutor
   socket.emit('join-as-tutor', $routeParams.room);
@@ -43,7 +43,6 @@ const pollController = function($scope, $http, $routeParams, $window) {
     $scope.highestCount = highestCount; // Save the highest count
 
   };
-
 
 };
 

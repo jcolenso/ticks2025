@@ -3,11 +3,11 @@ const introController = function ($scope, $location, $window) {
   $scope.room = {};
 
   $scope.learner = function() {
-    $location.url('/' + $scope.room.code.toUpperCase());
+    $location.url('/' + $scope.room.code.toLowerCase());
   };
 
   $scope.tutor = function() {
-    $location.url('/' + $scope.room.code.toUpperCase() + '/tutor');
+    $location.url('/' + $scope.room.code.toLowerCase() + '/tutor');
   };
 }
 

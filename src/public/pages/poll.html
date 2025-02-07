@@ -2,7 +2,7 @@
   <div class="panel">
     <div class="section">
       <div class="row">
-        <h1>Room {{room.room}}</h1>
+        <h1>{{ room.description || 'Room '+room.code }}</h1>
       </div>
     </div>
     <div class="section" ng-if="room.learners.length > 0">

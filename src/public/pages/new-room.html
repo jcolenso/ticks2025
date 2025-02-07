@@ -10,28 +10,24 @@
       <div class="section">
         <div class="row">
           <input type="text" 
-                 placeholder="Room" 
-                 ng-model="room.code" 
+                 placeholder="Room Name" 
+                 ng-model="room.name" 
                  autocomplete="off" 
-                 style="text-transform:uppercase" 
-                 minlength="2" 
-                 maxlength="8" 
-                 onkeypress="return /[A-Z0-9]/i.test(event.key)" 
+                 minlength="4" 
+                 maxlength="20" 
                  required>
         </div>
       </div>
       <div class="section-gap"></div>
       <div class="section">
         <div class="row">
-          <button type="submit" ng-click="form.$valid && learner()" class="button1">I'm a learner</button>
-          <span class="col-gap"></span>
-          <button type="submit" ng-click="form.$valid && tutor()" class="button2">I'm the tutor</button>
+          <button type="submit" ng-click="form.$valid && tutor()" class="button2">Create New Room</button>
         </div>
       </div>
       <div class="section-gap"></div>
       <div class="section">
         <div class="row3">
-          <div>Tutor - make up a unique room code for your class</div>
+          <div>Enter a name for your room. The code will be automatically created.</div>
         </div>
       </div>
       <div class="section-gap"></div>
