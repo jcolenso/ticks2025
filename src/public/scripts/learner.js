@@ -26,7 +26,7 @@ const learnerController = function($scope, $http, $routeParams, $localStorage, $
   function submitStatus() {
     const data = {
       client: getClient(),
-      room: $routeParams.room.toUpperCase(),
+      room: $routeParams.room.toLowerCase(),
       status: $scope.learner.status,
       name: $scope.learner.name
     };
@@ -37,7 +37,7 @@ const learnerController = function($scope, $http, $routeParams, $localStorage, $
   function submitName() {
     const data = {
       client: getClient(),
-      room: $routeParams.room.toUpperCase(),
+      room: $routeParams.room.toLowerCase(),
       name: $scope.learner.name
     };
     socket.emit('status', data);
@@ -49,7 +49,7 @@ const learnerController = function($scope, $http, $routeParams, $localStorage, $
   }
 
   function setTitle() {
-    $window.document.title = ($scope.learner.name || "Learner")  + " - " + $scope.room.code;
+    $window.document.title = ($scope.learner.name || "Learner")  + " - " + $scope.room.code.toUpperCase();
   }
 
   let delay = undefined;
@@ -64,7 +64,7 @@ const learnerController = function($scope, $http, $routeParams, $localStorage, $
   }
 
   $scope.room = {
-    code: $routeParams.room.toUpperCase()
+    code: $routeParams.room
   };
 
   $scope.learner = {
@@ -81,6 +81,7 @@ const learnerController = function($scope, $http, $routeParams, $localStorage, $
   socket.on('refresh-learner', function (data) {
     $scope.$applyAsync(function() {
       $scope.room.code = data.room;
+      $scope.room.description = data.description;
       $scope.learner.name = data.name || $scope.learner.name || "";
       $scope.learner.status = data.status || "";
       //submitName();
@@ -91,7 +92,7 @@ const learnerController = function($scope, $http, $routeParams, $localStorage, $
   function sendPing() {
     const data = {
       client: getClient(),
-      room: $routeParams.room.toUpperCase(),
+      room: $routeParams.room.toLowerCase(),
       name: $scope.learner.name
     };
     socket.emit('ping-from-learner', data);

@@ -3,7 +3,7 @@ const tutorController = function($scope, $http, $routeParams, $interval, $locati
   const pingIntervalInMilliseconds = 15 * 1000; // 15 seconds
 
   $scope.room = {
-    room: $routeParams.room.toUpperCase(),
+    code: $routeParams.room.toLowerCase(),
     learners: [],
     beep: true // Kick off ability to play hand-up beep
   };
@@ -15,7 +15,7 @@ const tutorController = function($scope, $http, $routeParams, $interval, $locati
   };
 
   const absUrl = $location.absUrl();
-  const url = new URL('/' + $scope.room.room, absUrl);
+  const url = new URL('/' + $scope.room.code, absUrl);
 
   $scope.url = url.href;
 
@@ -62,7 +62,7 @@ const tutorController = function($scope, $http, $routeParams, $interval, $locati
     $scope.selectedClients = [];
   };
 
-  $window.document.title = "Tutor - " + $scope.room.room;
+  $window.document.title = "Tutor - " + $scope.room.code.toUpperCase();
 
   // Register as a tutor
   socket.emit('join-as-tutor', $routeParams.room);
