@@ -35,7 +35,7 @@ app.config(function($routeProvider) {
     caseInsensitiveMatch: true
   })
   .otherwise({
-    templateUrl : "pages/new-room.html",
-    controller: 'newroom-controller'
+    templateUrl : "pages/intro.html",
+    controller: 'intro-controller',
   })
 });

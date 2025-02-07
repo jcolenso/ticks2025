@@ -74,20 +74,7 @@ app.get('*', function (req, res) {
   res.sendStatus(403); // Page Forbidden if it gets this far
 });
 
-// Function to create a room with a specified description
-function createRoom(code, description) {
-  debug(`createRoom: ${code},  ${description}`);
-//  return db[code] || {
-//    code: code,
-//    description: description,  // Use the provided description
-//    learners: {}
-//  };
-}
-
-module.exports = { createRoom }; // Export the function
-
 function getRoom(code) {
-  debug(`getRoom: ${code}`);
   return db[code] || {
     code: code,
     description: "Room " + code.toUpperCase(),  // Default room description
