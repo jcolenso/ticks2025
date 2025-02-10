@@ -39,16 +39,17 @@ app.use('/', express.static(path.join(__dirname, 'public'), {
   dotfiles: "deny"
 }));
 
-// If request looks like an unfound file, i.e. contains a dot, then return 404 page not found
+// If request looks like an unfound file, i.e. contains a dot, then return 404
 app.get('*.*', function (req, res) {
   debug(`Page not found: ${req.path}`);
-  res.sendStatus(404);
+  res.status(404).sendFile(path.join(__dirname, 'public/pages', '404.html'));
 });
 
 // Cannot be a single character
 app.get(/^\/.$/, function (req, res) {
   debug(`Forbidden [.]: ${req.path}`);
-  res.sendStatus(403); // Block paths that are exactly 1 character long
+  // Block paths that are exactly 1 character long
+  res.status(403).sendFile(path.join(__dirname, 'public/pages', '403.html'));
 });
 
 // For pages with letters and/or numbers return index.html
@@ -56,7 +57,7 @@ app.get(/^\/([A-Za-z0-9]+(\/[A-Za-z0-9]+)*)?$/, function (req, res) {
   // Check if there are any query parameters
   if (Object.keys(req.query).length > 0) {
     debug(`Forbidden [?]: ${req.path} ~ ${JSON.stringify(req.query)}`); 
-    return res.sendStatus(403);
+    res.status(403).sendFile(path.join(__dirname, 'public/pages', '403.html'));
   }
   // Send the index.html file (or other file) from the public folder
   debug(`URL: ${req.path}`);
