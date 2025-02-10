@@ -7,7 +7,9 @@
       <div class="row2 url" ng-if="room.room.length > 1">
         <span class="url">{{url}}</span>
         <span class="col-gap"></span>
-        <button ng-click="copyUrl()" title="Copy to clipboard" class="clipboard">
+        <button ng-click="copyUrl()" 
+        title="Copy to clipboard" 
+        class="btn btn-outline-dark rounded-pill">
           <i class="fas fa-clipboard"></i>
         </button>
       </div>
@@ -15,7 +17,7 @@
     <div class="section" ng-if="room.learners.length > 0">
       <div class="section-gap"></div>
       <div class="row2">
-        <table>
+        <table class="table table-sm">
           <thead>
             <tr>
               <td>
@@ -37,8 +39,6 @@
               </td>
              </tr>  
           </tbody>
-          <tfoot>            
-          </tfoot>
         </table>
       </div>
     </div>
@@ -55,18 +55,18 @@
     <div class="section" ng-if="room.learners.length > 0">
       <div class="section-gap"></div>
       <div class="row">
-        <button class="button1" ng-click="clearStatus()">Clear all status flags</button>
+        <button ng-click="clearStatus()"
+        class="btn btn-success rounded-pill">
+          Clear all status flags
+        </button>
       </div>
       <div class="row-gap"></div>
       <div class="row">
-        <button class="button2" ng-click="kickAllLearners()">Reset list of learners</button>
+        <button ng-click="kickAllLearners()"
+        class="btn btn-warning rounded-pill">
+          Reset list of learners
+        </button>
       </div>
-      <!-- <div ng-if="selectedClients.length > 0">
-        <div class="row-gap"></div>
-        <div class="row" >
-          <button class="button2" ng-click="kickSelectedLearners()">Reset selected learner(s)</button>
-        </div>  
-      </div> -->
       <div class="row-gap"></div>
       <div class="row">
         <div>

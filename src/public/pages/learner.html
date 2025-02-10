@@ -7,7 +7,7 @@
       <div class="row-gap"></div>
       <div class="row">
         <input type="text" 
-               pattern="[A-Za-z0-9 .-]+" 
+               pattern="[A-Za-z0-9\s.-]+" 
                title="Only letters, numbers, spaces, dots, and hyphens are allowed (max 20)"
                ng-model="learner.name" 
                placeholder="First name only" 
@@ -40,45 +40,58 @@
     <div class="section-gap"></div>
     <div class="section" ng-class="{invisible: !learner.name}">
       <div class="row">
-        <button ng-click="send('tick')">
+        <button ng-click="send('tick')" 
+        class="btn btn-lg btn-light rounded-pill border border-dark me-2 mb-1">
           <status-symbol status="'tick'"></status-symbol><span>Tick</span>
         </button>
-        <span class="col-gap"></span>
-        <button ng-click="send('cross')">
+        <button ng-click="send('cross')" 
+        class="btn btn-lg btn-light rounded-pill border border-dark me-2 mb-1">
           <status-symbol status="'cross'"></status-symbol><span>Cross</span>
         </button>
-        <span class="col-gap"></span>
-        <button ng-click="send('happy')">
+        <button ng-click="send('happy')" 
+        class="btn btn-lg btn-light rounded-pill border border-dark me-2 mb-1">
           <status-symbol status="'happy'"></status-symbol><span>Happy</span>
         </button>
-        <span class="col-gap"></span>
-        <button ng-click="send('hand-up')">
+        <button ng-click="send('hand-up')" 
+        class="btn btn-lg btn-light rounded-pill border border-dark me-2 mb-1">
           <status-symbol status="'hand-up'"></status-symbol><span>Hand</span>
         </button>
       </div>
       <div class="row-gap"></div>
       <div class="row">
-        <button ng-click="send('A')">A</button>
-        <span class="col-gap"></span>
-        <button ng-click="send('B')">B</button>
-        <span class="col-gap"></span>
-        <button ng-click="send('C')">C</button>
-        <span class="col-gap"></span>
-        <button ng-click="send('D')">D</button>
-        <span class="col-gap"></span>
-        <button ng-click="send('E')">E</button>
+        <button ng-click="send('A')" 
+        class="btn btn-lg btn-light rounded-pill border border-dark me-2 mb-1">
+          A
+        </button>
+        <button ng-click="send('B')" 
+        class="btn btn-lg btn-light rounded-pill border border-dark me-2 mb-1">
+          B
+        </button>
+        <button ng-click="send('C')" 
+        class="btn btn-lg btn-light rounded-pill border border-dark me-2 mb-1">
+          C
+        </button>
+        <button ng-click="send('D')" 
+        class="btn btn-lg btn-light rounded-pill border border-dark me-2 mb-1">
+          D
+        </button>
+        <button ng-click="send('E')" 
+        class="btn btn-lg btn-light rounded-pill border border-dark me-2 mb-1">
+          E
+        </button>
       </div>
       <div class="row-gap"></div>
       <div class="row">
-        <button ng-click="send('smile')">
+        <button ng-click="send('smile')" 
+        class="btn btn-lg btn-light rounded-pill border border-dark me-2 mb-1">
           <status-symbol status="'smile'"></status-symbol><span>Smile</span>
         </button>
-        <span class="col-gap"></span>
-        <button ng-click="send('coffee')">
+        <button ng-click="send('coffee')" 
+        class="btn btn-lg btn-light rounded-pill border border-dark me-2 mb-1">
           <status-symbol status="'coffee'"></status-symbol><span>Break</span>
         </button>
-        <span class="col-gap"></span>
-        <button ng-click="send('away')">
+        <button ng-click="send('away')" 
+        class="btn btn-lg btn-light rounded-pill border border-dark me-2 mb-1">
           <status-symbol status="'away'"></status-symbol><span>Away</span>
         </button>
       </div>
@@ -86,7 +99,10 @@
     <div class="section-gap"></div>
     <div class="section" ng-class="{invisible: !learner.name}">
       <div class="row">
-        <button ng-click="send('')">Clear</button>
+        <button ng-click="send('')" 
+        class="btn btn-lg btn-light rounded-pill border border-dark me-2 mb-1">
+          Clear
+        </button>
       </div>
     </div>
   </div>
