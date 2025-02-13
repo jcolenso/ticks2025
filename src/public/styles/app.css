@@ -106,6 +106,13 @@ button.button3 {
   align-items: stretch;
 }
 
+.row1 {
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  text-align: left;
+}
+
 .row2 {
   display: flex;
   justify-content: center;
