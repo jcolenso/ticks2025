@@ -1,4 +1,5 @@
 const newroomController = function ($scope, $location, $window) {
+
   $window.document.title = "Ticks and Crosses";
   $scope.room = {};
 
@@ -25,13 +26,21 @@ const newroomController = function ($scope, $location, $window) {
 
   // Call the function to generate room code
   const roomCode = generateRoomCode();
+  const roomName = "xyz is the room name";
 
-  // Create the record in the database (db)
-  // #TODO
+  // Create the record in the database
+  $scope.room = {
+    code: roomCode,
+    name: roomName
+  };
+  $scope.createRoom = function() {
+    socket.emit('create-room', $scope.room);
+  };
 
   // Call the URL using the new room code
   $scope.tutor = function() {
-    $location.url('/' + roomCode + '/tutor');
+    $location.url('/about');
+//    $location.url('/' + roomCode + '/tutor');
   };
 }
 

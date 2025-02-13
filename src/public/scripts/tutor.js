@@ -64,6 +64,19 @@ const tutorController = function($scope, $http, $routeParams, $interval, $locati
 
   $window.document.title = "Tutor - " + $scope.room.code.toUpperCase();
 
+  const room1 = {
+    code: "roomCode45678ttttt",
+    name: "room Name 4 5ddddddddddddddddddddd 6 7 8"
+  };
+  const room2 = db[room1.code];
+
+  // Create the record in the database
+  const room3 = {
+    code: "roomCode339",
+    name: "roomName339"
+  };
+  socket.emit('create-room', room3);
+
   // Register as a tutor
   socket.emit('join-as-tutor', $routeParams.room);
 

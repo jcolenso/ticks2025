@@ -74,6 +74,11 @@ app.get('*', function (req, res) {
   res.sendStatus(403); // Page Forbidden if it gets this far
 });
 
+function createRoom(room) {
+  console.log(`Creating room function: ${room.code}`);
+  db[room.code] = room;
+}
+
 function getRoom(code) {
   return db[code] || {
     code: code,
@@ -159,6 +164,11 @@ io.on('connection', function(socket) {
     };
     socket.emit('refresh-learner', data);
   }
+
+  socket.on('create-room', (room) => {
+    console.log(`Creating room: ${room.code}`);
+    createRoom(room);
+  });
 
   socket.on('join-as-learner', (roomCode, client) => {
     roomCode = roomCode.toLowerCase();
