@@ -52,7 +52,7 @@ app.get(/^\/.$/, function (req, res) {
 });
 
 // For pages with letters and/or numbers return index.html
-app.get(/^\/([A-Za-z0-9]+(\/[A-Za-z0-9]+)*)?$/, function (req, res) {
+app.get(/^\/([A-Za-z0-9-]+(\/[A-Za-z0-9]+)*)?$/, function (req, res) {
   // Check if there are any query parameters
   if (Object.keys(req.query).length > 0) {
     debug(`Forbidden [?]: ${req.path} ~ ${JSON.stringify(req.query)}`); 
@@ -75,10 +75,12 @@ app.get('*', function (req, res) {
 });
 
 function getRoom(code) {
+  const createdDate = new Date()
   return db[code] || {
     code: code,
     description: "Room " + code.toUpperCase(),  // Default room description
-    learners: {}
+    learners: {},
+    createdDate: createdDate
   };
 }
 
