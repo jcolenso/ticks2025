@@ -13,10 +13,9 @@
                  placeholder="Room" 
                  ng-model="room.code" 
                  autocomplete="off" 
-                 style="text-transform:uppercase" 
-                 minlength="4" 
-                 maxlength="10" 
-                 onkeypress="return /[A-Z0-9]/i.test(event.key)" 
+                 minlength="3" 
+                 maxlength="25" 
+                 onkeypress="return /[A-Za-z0-9 ]/i.test(event.key)" 
                  required>
         </div>
       </div>
@@ -30,14 +29,14 @@
       </div>
       <div class="section-gap"></div>
       <div class="section">
-        <div class="row3">
-          <div>Tutor - make up a unique room code for your class</div>
+        <div class="row1">
+          <div>Learner - enter the room code given to you by your tutor.</div>
         </div>
       </div>
       <div class="section-gap"></div>
       <div class="section">
-        <div class="row">
-          <a ng-href="./about">About this app</a>
+        <div class="row1">
+          <div>Tutor - enter a room name. A room code will be allocated to you.</div>
         </div>
       </div>
     </div>
