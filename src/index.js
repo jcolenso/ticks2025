@@ -51,6 +51,18 @@ app.get(/^\/.$/, function (req, res) {
   res.sendStatus(403); // Block paths that are exactly 1 character long
 });
 
+// Define your API routes
+app.get('/api/rooms', function (req, res) {
+  debug(`API call: ${req.path}`);
+  // Handle the request to get all rooms
+  //res.json(db);
+  // Get the codes rooms
+  const roomCodes = Object.keys(db);
+  const roomCount = roomCodes.length;
+  // Send the result as a JSON response
+  res.json(roomCount);
+});
+
 // For pages with letters and/or numbers return index.html
 app.get(/^\/([A-Za-z0-9-]+(\/[A-Za-z0-9]+)*)?$/, function (req, res) {
   // Check if there are any query parameters
