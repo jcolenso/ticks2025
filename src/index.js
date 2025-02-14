@@ -60,7 +60,7 @@ app.get('/api/rooms', function (req, res) {
   const roomCodes = Object.keys(db);
   const roomCount = roomCodes.length;
   // Send the result as a JSON response
-  res.json(roomCount);
+  res.json(roomCodes);
 });
 
 // For pages with letters and/or numbers return index.html
