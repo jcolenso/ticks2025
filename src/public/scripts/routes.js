@@ -4,6 +4,10 @@ app.config(function($routeProvider) {
     templateUrl : "pages/about.html",
     caseInsensitiveMatch: true
   })
+  .when("/api", {
+    templateUrl : "pages/api.html",
+    caseInsensitiveMatch: true
+  })
   .when("/settings", {
     templateUrl : "pages/settings.html",
     controller: "settings",
@@ -38,4 +42,5 @@ app.config(function($routeProvider) {
     templateUrl : "pages/intro.html",
     controller: 'intro-controller',
   })
+
 });
