@@ -27,10 +27,22 @@ const learnerController = function($scope, $http, $routeParams, $localStorage, $
     const data = {
       client: getClient(),
       room: $routeParams.room.toLowerCase(),
+      name: $scope.learner.name,
       status: $scope.learner.status,
-      name: $scope.learner.name
+      answer: $scope.learner.status
     };
     // $scope.timeMessage = $scope.learner.status; // Show status name
+    socket.emit('status', data);
+  }
+
+  function submitAnswer() {
+    const data = {
+      client: getClient(),
+      room: $routeParams.room.toLowerCase(),
+      name: $scope.learner.name,
+      status: $scope.learner.status,
+      answer: $scope.learner.status
+    };
     socket.emit('status', data);
   }
 
@@ -42,9 +54,9 @@ const learnerController = function($scope, $http, $routeParams, $localStorage, $
     };
     socket.emit('status', data);
   }
-
   $scope.send = function(status) {
     $scope.learner.status = status;
+    $scope.learner.answer = status;
     submitStatus();
   }
 
@@ -52,6 +64,7 @@ const learnerController = function($scope, $http, $routeParams, $localStorage, $
     $window.document.title = ($scope.learner.name || "Learner")  + " - " + $scope.room.code.toUpperCase();
   }
 
+  // Learner changes their name ~ submit after 250 milliseconds
   let delay = undefined;
 
   $scope.nameChanged = function() {
@@ -63,18 +76,31 @@ const learnerController = function($scope, $http, $routeParams, $localStorage, $
     delay = $timeout(submitName, 250);
   }
 
+  // Learner enters an answer
+  let answerDelay = undefined;
+
+  $scope.answerChanged = function() {
+    getStorage().answer = $scope.learner.answer;
+    if (answerDelay) {
+      $timeout.cancel(answerDelay);
+    }
+    answerDelay = $timeout(submitAnswer, 2000); // 2 seconds delay
+  };
+  
   $scope.room = {
     code: $routeParams.room
   };
 
   $scope.learner = {
     name: getStorage().name || "",
-    status: ""
+    status: "",
+    answer: ""
   };
 
   socket.on('clear', function() {
     $scope.$applyAsync(function() {
-      $scope.learner.status = '';
+      $scope.learner.status = "";
+      $scope.learner.answer = ""
     });
   });
 
@@ -84,6 +110,7 @@ const learnerController = function($scope, $http, $routeParams, $localStorage, $
       $scope.room.description = data.description;
       $scope.learner.name = data.name || $scope.learner.name || "";
       $scope.learner.status = data.status || "";
+      $scope.learner.answer = data.status || "";
       //submitName();
       setTitle();
     });
