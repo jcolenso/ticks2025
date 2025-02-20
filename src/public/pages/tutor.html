@@ -21,6 +21,9 @@
               <td>
                 Total learners
               </td>
+              <td>
+                &nbsp;
+              </td>
               <td style="text-align: right;">
                 {{ room.learners.length }}
               </td>
@@ -29,7 +32,14 @@
           <tbody>
             <tr class="learner" ng-repeat="learner in room.learners" ng-click="selectLearner(learner)" ng-class="{active: learner.isActive, inactive: !learner.isActive, selected: selectedClients.includes(learner.client)}" ng-if="learner.status || !settings.hideLeanersWithNoStatus">
               <td>
-                <span>{{learner.name}}</span>
+                <span>
+                  {{learner.name}}
+                </span>
+              </td>
+              <td style="text-align: right;">
+                <span>
+                  {{learner.answer}}
+                </span>
               </td>
               <td class="status">
                 <span ng-if="learner.handUpRank > 0">{{learner.handUpRank}}</span>
