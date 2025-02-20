@@ -114,15 +114,9 @@ function tidyRoom(room) {
   saveRoom(room);
 }
 
+// Used when sorting learners to show on Tutor screen
 function compareLearners(a, b) {
-  // if (a.isActive != b.isActive) {
-  //   return a.isActive? -1  : +1;
-  // }
-  if (a.name.toLowerCase() != b.name.toLowerCase()) {
-    return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : +1;
-  } else {
-    return 0;
-  }
+  return a.name.toLowerCase().localeCompare(b.name.toLowerCase());
 }
 
 io.on('connection', function(socket) {
@@ -157,7 +151,6 @@ io.on('connection', function(socket) {
     if (debug.enabled) {
       fs.writeFileSync(logFileDb, `${JSON.stringify(db, null, 2)}\n`, 'utf8');
     }    
-
   }
   
   function refreshLearner(roomCode, client) {
@@ -169,9 +162,13 @@ io.on('connection', function(socket) {
       description: room.description,
       client: client,
       name: learner.name || "",
-      status: learner.status || ""
+      status: learner.status || "",
+      answer: learner.answer || ""
     };
     socket.emit('refresh-learner', data);
+    if (debug.enabled) {
+      fs.writeFileSync(logFileDb, `${JSON.stringify(db, null, 2)}\n`, 'utf8');
+    }    
   }
 
   socket.on('join-as-learner', (roomCode, client) => {
@@ -206,6 +203,7 @@ io.on('connection', function(socket) {
     for (const client in room.learners) {
       const learner = room.learners[client];
       learner.status = "";
+      learner.answer = "";
       learner.handUpRank = undefined;
     }
     saveRoom(room);
@@ -235,8 +233,8 @@ io.on('connection', function(socket) {
 
   socket.on('status', (data) => {
     try {
-      debug(`status: ${data.room} - ${data.name} ~ ${data.status}`);
-      const { client, name, status } = data;
+      debug(`status: ${data.room} - ${data.name} ~ ${data.status} / ${data.answer}`);
+      const { client, name, status, answer } = data;
       const roomCode = data.room.toLowerCase();
       associateSocketWithLearnerRoom(roomCode);
       const room = getRoom(roomCode);
@@ -263,6 +261,9 @@ io.on('connection', function(socket) {
         } else {
           learner.handUpRank = undefined;
         }
+      }
+      if (answer != undefined) {
+        learner.answer = answer;
       }
       learner.lastCommunication = new Date();
       room.learners[client] = learner;

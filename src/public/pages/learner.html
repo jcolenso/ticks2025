@@ -38,6 +38,20 @@
       </div>
     </div>
     <div class="section-gap"></div>
+
+    <div class="section" ng-class="{invisible: !learner.name}">
+      <div class="row">
+      <input type="text" 
+             title="Enter numbers or one word only (max 15)"
+             maxlength="15"
+             autocomplete="off" 
+             ng-model="learner.answer" 
+             placeholder="Answer" 
+             ng-change="answerChanged()">
+      </div>
+    </div>
+
+    <div class="section-gap"></div>
     <div class="section" ng-class="{invisible: !learner.name}">
       <div class="row">
         <button ng-click="send('tick')">
