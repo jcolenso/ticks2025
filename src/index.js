@@ -55,12 +55,12 @@ app.get(/^\/.$/, function (req, res) {
 app.get('/api/rooms', function (req, res) {
   debug(`API call: ${req.path}`);
   // Handle the request to get all rooms
-  //res.json(db);
+  res.json(db);
   // Get the codes rooms
-  const roomCodes = Object.keys(db);
-  const roomCount = roomCodes.length;
+  //const roomCodes = Object.keys(db);
+  //const roomCount = roomCodes.length;
   // Send the result as a JSON response
-  res.json(roomCount);
+  //res.json(roomCount);
 });
 
 // For pages with letters and/or numbers return index.html
@@ -173,8 +173,6 @@ io.on('connection', function(socket) {
       answer: learner.answer || ""
     };
     socket.emit('refresh-learner', data);
-    // #############################################
-    console.log(JSON.stringify(data));
     if (debug.enabled) {
       fs.writeFileSync(logFileDb, `${JSON.stringify(db, null, 2)}\n`, 'utf8');
     }    

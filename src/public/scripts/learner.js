@@ -29,7 +29,7 @@ const learnerController = function($scope, $http, $routeParams, $localStorage, $
       room: $routeParams.room.toLowerCase(),
       name: $scope.learner.name,
       status: $scope.learner.status,
-      answer: $scope.learner.status
+      answer: $scope.learner.answer || ""
     };
     // $scope.timeMessage = $scope.learner.status; // Show status name
     socket.emit('status', data);
@@ -40,8 +40,7 @@ const learnerController = function($scope, $http, $routeParams, $localStorage, $
       client: getClient(),
       room: $routeParams.room.toLowerCase(),
       name: $scope.learner.name,
-      status: $scope.learner.status,
-      answer: $scope.learner.status
+      answer: $scope.learner.answer || ""
     };
     socket.emit('status', data);
   }
@@ -54,9 +53,12 @@ const learnerController = function($scope, $http, $routeParams, $localStorage, $
     };
     socket.emit('status', data);
   }
+
   $scope.send = function(status) {
     $scope.learner.status = status;
-    $scope.learner.answer = status;
+    if (status === "") {
+      $scope.learner.answer = "";
+    }
     submitStatus();
   }
 
@@ -80,6 +82,7 @@ const learnerController = function($scope, $http, $routeParams, $localStorage, $
   let answerDelay = undefined;
 
   $scope.answerChanged = function() {
+    $scope.learner.answer = $scope.learner.answer.replace(/[^0-9.]/g, ''); // Remove non-numeric characters except '.'
     getStorage().answer = $scope.learner.answer;
     if (answerDelay) {
       $timeout.cancel(answerDelay);
@@ -110,7 +113,7 @@ const learnerController = function($scope, $http, $routeParams, $localStorage, $
       $scope.room.description = data.description;
       $scope.learner.name = data.name || $scope.learner.name || "";
       $scope.learner.status = data.status || "";
-      $scope.learner.answer = data.status || "";
+      $scope.learner.answer = data.answer || "";
       //submitName();
       setTitle();
     });
