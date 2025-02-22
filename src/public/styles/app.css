@@ -11,6 +11,11 @@ h1 {
   user-select: none;
 }
 
+.big-page {
+  transform: scale(1.8) translateY(22%);
+  transform-origin: center; /* Ensures scaling starts from the top left */
+}
+
 .selected {
   background-color: yellow;
 }
