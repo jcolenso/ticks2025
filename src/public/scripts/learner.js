@@ -66,7 +66,7 @@ const learnerController = function($scope, $http, $routeParams, $localStorage, $
     $window.document.title = ($scope.learner.name || "Learner")  + " - " + $scope.room.code.toUpperCase();
   }
 
-  // Learner changes their name ~ submit after 250 milliseconds
+  // Learner changes their name ~ submit after 500 milliseconds
   let delay = undefined;
 
   $scope.nameChanged = function() {
@@ -75,14 +75,14 @@ const learnerController = function($scope, $http, $routeParams, $localStorage, $
     if (delay) {
       $timeout.cancel(delay);
     }
-    delay = $timeout(submitName, 250);
+    delay = $timeout(submitName, 500);
   }
 
   // Learner enters an answer
   let answerDelay = undefined;
 
   $scope.answerChanged = function() {
-    $scope.learner.answer = $scope.learner.answer.replace(/[^a-zA-Z0-9.]/g, '').trim();
+    $scope.learner.answer = $scope.learner.answer.replace(/[^a-zA-Z0-9. ]/g, '').trim();
     getStorage().answer = $scope.learner.answer;
     if (answerDelay) {
       $timeout.cancel(answerDelay);
