@@ -82,7 +82,7 @@ const learnerController = function($scope, $http, $routeParams, $localStorage, $
   let answerDelay = undefined;
 
   $scope.answerChanged = function() {
-    $scope.learner.answer = $scope.learner.answer.replace(/[^a-zA-Z0-9. ]/g, '').trim();
+    $scope.learner.answer = $scope.learner.answer.replace(/[^a-zA-Z0-9. -]/g, '').trim();
     getStorage().answer = $scope.learner.answer;
     if (answerDelay) {
       $timeout.cancel(answerDelay);
