@@ -11,7 +11,7 @@
                title="Only letters, numbers, spaces, dots, and hyphens are allowed (max 20)"
                ng-model="learner.name" 
                placeholder="First name only" 
-               maxlength="20" 
+               maxlength="15" 
                autocomplete="off" 
                ng-change="nameChanged()">
       </div>
@@ -19,7 +19,7 @@
     <div class="section-gap"></div>
     <div class="section" ng-class="{invisible: learner.name}">
       <div class="row">Only letters, numbers, spaces, dots, and hyphens</div>
-      <div class="row">Maximum 20 characters</div>
+      <div class="row">Maximum 15 characters</div>
     </div>
     <div class="section" ng-class="{invisible: !learner.name}">
       <div class="row">
@@ -42,8 +42,8 @@
     <div class="section" ng-class="{invisible: !learner.name}">
       <div class="row">
       <input type="text" 
-             title="Enter numbers or one word only (max 15)"
-             maxlength="15"
+             title="Enter your answer (maximum of 20 characters)"
+             maxlength="20"
              autocomplete="off" 
              ng-model="learner.answer" 
              placeholder="Answer" 
